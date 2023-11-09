@@ -57,7 +57,7 @@ function twineToJSON(format) {
     const passageElements = Array.from(storyElement.getElementsByTagName(PASSAGE_TAG_NAME));
     result.passages = passageElements.map((passageElement) => {
         return processPassageElement(passageElement, format);
-    });
+    }).filter((element) => element !== null)
     return result;
 }
 
@@ -78,6 +78,9 @@ function validate(format) {
  */
 function processPassageElement(passageElement, format) {
     const passageMeta = getElementAttributes(passageElement);
+    if (passageMeta.name == "End") {
+        return;
+    }
     const result = {
         name: passageMeta.name,
         tags: passageMeta.tags,
@@ -161,18 +164,14 @@ function extractLinksAtIndex(passageText, currentIndex) {
     const currentChar = passageText[currentIndex];
     const nextChar = passageText[currentIndex + 1];
     if (currentChar === '[' && nextChar === '[') {
+        let propRegexPattern = /{{(?:[^{}]|{(?:[^{}]|{[^{}]*})*})*}}(?:[^{}]|{(?:[^{}]|{[^{}]*})*})*{{\\/(?:[^{}]|{(?:[^{}]|{[^{}]*})*})*}}/g
         const link = getSubstringBetweenBrackets(passageText, currentIndex + 1);
-        const leftSplit = link.split('<-', 2);
-        const rightSplit = link.split('->', 2);
+        const linkSplit = link.replace(propRegexPattern, '').split("|")
         const original = passageText.substring(currentIndex, currentIndex + link.length + 4);
-        if (leftSplit.length === 2) {
-            return { linkText: leftSplit[1].trim(), passageName: leftSplit[0].trim(), original: original };
-        }
-        else if (rightSplit.length === 2) {
-            return { linkText: rightSplit[0].trim(), passageName: rightSplit[1].trim(), original: original };
-        }
-        else {
-            return { linkText: link.trim(), passageName: link.trim(), original: original };
+        if (linkSplit.length > 1) {
+            return { text: linkSplit[0].trim(), next: linkSplit[1].trim(), original: original };
+        } else {
+            return { text: link.trim(), next: link.trim(), original: original };
         }
     }
 }
@@ -223,14 +222,14 @@ function sanitizeText(passageText, links, hooks, format) {
     links.forEach((link) => {
         passageText = passageText.replace(link.original, '');
     });
-    const propRegexPattern = /\\{\\{((\\s|\\S)+?)\\}\\}((\\s|\\S)+?)\\{\\{\\/\\1\\}\\}/gm;
+    let propRegexPattern = /{{(?:[^{}]|{(?:[^{}]|{[^{}]*})*})*}}(?:[^{}]|{(?:[^{}]|{[^{}]*})*})*{{\\/(?:[^{}]|{(?:[^{}]|{[^{}]*})*})*}}/g
 
     if (format === FORMAT_HARLOWE_3) {
         hooks.forEach((hook) => {
             passageText = passageText.replace(hook.original, '');
         });
     }
-    return passageText.trim();
+    return passageText.replace(propRegexPattern, '').trim();
 }
 
 
