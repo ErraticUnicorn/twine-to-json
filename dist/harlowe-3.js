@@ -1,7 +1,7 @@
 window.storyFormat({
     "name": "Harlowe 3 to JSON",
     "version": "0.0.7",
-    "author": "Jonathan Schoonhoven",
+    "author": "Jonathan Schoonhoven  & Em Lazer-Walker & David Wert",
     "description": "Convert Harlowe 3-formatted Twine story to JSON",
     "proofing": false,
     "source": `

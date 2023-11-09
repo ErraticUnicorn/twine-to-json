@@ -51,7 +51,7 @@ function _generateFormat({ name, version, description, source }) {
 window.storyFormat({
     "name": "${name}",
     "version": "${version}",
-    "author": "Jonathan Schoonhoven",
+    "author": "Jonathan Schoonhoven  & Em Lazer-Walker & David Wert",
     "description": "${description}",
     "proofing": false,
     "source": \`

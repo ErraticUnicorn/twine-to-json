@@ -1,7 +1,7 @@
 window.storyFormat({
     "name": "Twine to JSON",
     "version": "0.0.7",
-    "author": "Jonathan Schoonhoven",
+    "author": "Jonathan Schoonhoven  & Em Lazer-Walker & David Wert",
     "description": "Convert Twine story to JSON",
     "proofing": false,
     "source": `
