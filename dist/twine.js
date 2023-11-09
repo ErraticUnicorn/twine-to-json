@@ -171,7 +171,7 @@ function extractLinksAtIndex(passageText, currentIndex) {
         if (linkSplit.length > 1) {
             return { text: linkSplit[0].trim(), next: linkSplit[1].trim(), original: original };
         } else {
-            return { text: link.trim(), next: link.trim(), original: original };
+            return { text: "", next: link.trim(), original: original };
         }
     }
 }
