@@ -73,8 +73,9 @@ function processPassageElement(passageElement, format) {
     };
     result.text = passageElement.innerText.trim();
     Object.assign(result, processPassageText(result.text, format));
+    Object.assign(result, extractPropsFromText(result.text) )
     result.cleanText = sanitizeText(result.text, result.links, result.hooks, format);
-    return result;
+    return { [passageMeta.name]: {result} };
 }
 
 
@@ -109,8 +110,43 @@ function processPassageText(passageText, format) {
     return result;
 }
 
+function extractPropsFromText(text) {
+    var props = {};
+    var propMatch;
+    var matchFound = false;
+    const propRegexPattern = /\{\{((\s|\S)+?)\}\}((\s|\S)+?)\{\{\/\1\}\}/gm;
+
+    while ((propMatch = propRegexPattern.exec(text)) !== null) {
+      // The "key" of the prop, AKA the value wrapped in {{ }}.
+      const key = propMatch[1];
+
+      // Extract and sanitize the actual value.
+      // This will remove any new lines.
+      const value = propMatch[3].replace(/(\r\n|\n|\r)/gm, '');
+
+      // We can nest props like so: {{foo}}{{bar}}value{{/bar}}{{/foo}},
+      // so call this same method again to extract the values further.
+      const furtherExtraction = this.extractPropsFromText(value);
+
+      if (furtherExtraction !== null) {
+        props[key] = furtherExtraction;
+      } else {
+        props[key] = value;
+      }
+
+      matchFound = true;
+    }
+
+    if (!matchFound) {
+      return null;
+    }
+
+    return props;
+  }
+
 
 function extractLinksAtIndex(passageText, currentIndex) {
+    // TODO: Ensure linkText only has text and not anything past '|', also clean props
     const currentChar = passageText[currentIndex];
     const nextChar = passageText[currentIndex + 1];
     if (currentChar === '[' && nextChar === '[') {
@@ -176,6 +212,8 @@ function sanitizeText(passageText, links, hooks, format) {
     links.forEach((link) => {
         passageText = passageText.replace(link.original, '');
     });
+    const propRegexPattern = /\{\{((\s|\S)+?)\}\}((\s|\S)+?)\{\{\/\1\}\}/gm;
+
     if (format === FORMAT_HARLOWE_3) {
         hooks.forEach((hook) => {
             passageText = passageText.replace(hook.original, '');

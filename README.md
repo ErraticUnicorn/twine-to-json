@@ -79,3 +79,17 @@ You should probably use Twison. Twine-to-JSON currently has an unstable API and 
 ## Contributing
 
 Please do.
+
+## Development
+
+If you want to hack on the package itself:
+
+1. Clone this repo and run `npm install` to install dependencies.
+2. Make your changes to the unminified code in the `src` folder
+3. Run `npm run build` to compile your source into a `format.js` file that Twine 2 can understand. It'll be placed in the `dist` folder. Alternatively, you can run `npm run watch` to watch the `src` directory for changes and auto-recompile every time you save.
+
+### Testing your changes locally
+
+Running `npm start` will start the `watch.js` auto-compile behavior, and also start a local web server that serves the compiled `format.js` file. By default, this will be available at `http://localhost:3000/format.js`. Add that URL as a story format to your copy of Twine 2; every time you save a source file and then re-generate the "Play" view of your story in Twine, it should use the latest version of your code.
+
+This is easier to do with the browser-based version of Twine 2 than with the downloadable copy, as you can just refresh your output page and it'll use the latest version of Twison.

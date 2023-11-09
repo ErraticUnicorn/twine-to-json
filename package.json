@@ -1,19 +1,25 @@
 {
   "name": "twine-to-json",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Convert Twine stories to JSON for a variety of formats.",
   "scripts": {
     "build": "node ./src/build.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "node watch.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jtschoonhoven/twine-to-json.git"
   },
+  "dependencies": {
+    "watch": "^0.16.0",
+    "express": "^4.13.3"
+  },
   "author": "Jonathan Schoonhoven",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jtschoonhoven/twine-to-json/issues"
+    "url": "https://github.com/erraticunicorn/twine-to-json/issues"
   },
-  "homepage": "https://github.com/jtschoonhoven/twine-to-json#readme"
+  "homepage": "https://github.com/erraticunicorn/twine-to-json#readme"
 }
