@@ -25,40 +25,48 @@ From within your story, set the story format to Twison. Choosing "Play" will now
 ## Example Output
 
 ```json
+
+
 {
-  "name": "GeoTest",
-  "creator": "Twine",
-  "creatorVersion": "2.3.5",
-  "schema": "Harlowe 3 to JSON",
-  "schemaVersion": "0.0.5",
-  "uuid": "A0472E68-7822-4211-9F11-5CBD919162DC",
-  "passages": [
-    {
-      "name": "StoryStart",
-      "tags": "",
-      "id": "1",
-      "text": "Once upon a time there was a sheep.\n[[Pet the sheep -> PetSheep]]",
-      "links": [
-        {
-          "linkText": "Pet the sheep",
-          "passageName": "PetSheep",
-          "original": "[[Pet the sheep -> PetSheep]]"
-        }
-      ],
-      "hooks": [],
-      "cleanText": "Once upon a time there was a sheep."
-    },
-    {
-      "name": " PetSheep",
-      "tags": "",
-      "id": "2",
-      "text": "You pet the sheep. The end.",
-      "links": [],
-      "hooks": [],
-      "cleanText": "You pet the sheep. The end."
-    }
-  ]
-}
+	"uuid": "854562F1-DF88-47FC-92FE-033847090CD2",
+	"name": "JockIntroConversation",
+	"creator": "Twine",
+	"creatorVersion": "2.7.1",
+	"schemaName": "Twine to JSON",
+	"schemaVersion": "0.0.7",
+	"createdAtMs": 1699871852656,
+	"passages": {
+	  "JockIntro": {
+		"title": "JockIntro",
+		"tags": "",
+		"id": "1",
+		"text": "{{name}}Jock{{/name}}\n\nYou coming to the game tonight, brah?\n\n[[Yes|Nice]]\n[[No|End]]",
+		"links": [
+		  {
+			"text": "Yes",
+			"next": "Nice",
+			"original": "[[Yes|Nice]]"
+		  },
+		  {
+			"text": "No",
+			"next": "End",
+			"original": "[[No|End]]"
+		  }
+		],
+		"name": "Jock",
+		"cleanText": "You coming to the game tonight, brah?"
+	  },
+	  "Nice": {
+		"title": "Nice",
+		"tags": "",
+		"id": "3",
+		"text": "{{name}}Jock{{/name}}\nNiiiiiice",
+		"links": [],
+		"name": "Jock",
+		"cleanText": "Niiiiiice"
+	  }
+	}
+  }
 ```
 
 
