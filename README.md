@@ -1,4 +1,4 @@
-# Twine-to-JSON
+# Twine-to-JSON-to-Godot
 
 A story format for converting a Twine 2 story to JSON with special support for Harlowe 3.x.
 
@@ -12,17 +12,8 @@ From the Twine 2 homescreen, select `Formats` and then `Add a New Format`. At th
 For vanilla Twine-to-JSON (without special support for Harlowe 3.x), use this address:
 
 ```
-https://jtschoonhoven.github.io/twine-to-json/dist/twine.js
+https://erraticunicorn.com/twine-to-json-to-godot/dist/twine.js
 ```
-
-For Harlowe-flavored Twine-to-JSON, use this address:
-
-```
-https://jtschoonhoven.github.io/twine-to-json/dist/harlowe-3.js
-```
-
-If you're not sure which one you should use then go with the Harlowe-flavored version. It has everything the vanilla flavor has, plus a little extra.
-
 
 ## Export
 
