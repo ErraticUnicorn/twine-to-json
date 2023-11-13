@@ -43,9 +43,13 @@ function twineToJSON(format) {
     };
     validate(format);
     const passageElements = Array.from(storyElement.getElementsByTagName(PASSAGE_TAG_NAME));
-    result.passages = passageElements.map((passageElement) => {
-        return processPassageElement(passageElement, format);
-    }).filter((element) => element !== null)
+    result.passages = passageElements.reduce((acc, passageElement) => {
+        const passageObj = processPassageElement(passageElement, format);
+        if (passageObj !== null) {
+            acc[passageObj.result.title] = passageObj.result;
+        }
+        return acc;
+    }, {});
     return result;
 }
 
@@ -67,10 +71,10 @@ function validate(format) {
 function processPassageElement(passageElement, format) {
     const passageMeta = getElementAttributes(passageElement);
     if (passageMeta.name == "End") {
-        return;
+        return null;
     }
     const result = {
-        name: passageMeta.name,
+        title: passageMeta.name,
         tags: passageMeta.tags,
         id: passageMeta.pid,
     };
@@ -78,7 +82,7 @@ function processPassageElement(passageElement, format) {
     Object.assign(result, processPassageText(result.text, format));
     Object.assign(result, extractPropsFromText(result.text) )
     result.cleanText = sanitizeText(result.text, result.links, result.hooks, format);
-    return { [passageMeta.name]: {result} };
+    return {result};
 }
 
 
