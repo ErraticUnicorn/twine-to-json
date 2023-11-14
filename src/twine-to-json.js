@@ -80,7 +80,7 @@ function processPassageElement(passageElement, format) {
     };
     result.text = passageElement.innerText.trim();
     Object.assign(result, processPassageText(result.text, format));
-    Object.assign(result, extractPropsFromText(result.text) )
+    Object.assign(result, extractPropsFromText(sanitizeLinks(result.text, result.links)) )
     result.cleanText = sanitizeText(result.text, result.links, result.hooks, format);
     return {result};
 }
@@ -123,6 +123,7 @@ function extractPropsFromText(text) {
     var matchFound = false;
     const propRegexPattern = /\{\{((\s|\S)+?)\}\}((\s|\S)+?)\{\{\/\1\}\}/gm;
 
+    //TODO: Put this in the reply if its within a reply rather than top level
     while ((propMatch = propRegexPattern.exec(text)) !== null) {
       // The "key" of the prop, AKA the value wrapped in {{ }}.
       const key = propMatch[1];
@@ -160,10 +161,11 @@ function extractLinksAtIndex(passageText, currentIndex) {
         const link = getSubstringBetweenBrackets(passageText, currentIndex + 1);
         const linkSplit = link.replace(propRegexPattern, '').split("|")
         const original = passageText.substring(currentIndex, currentIndex + link.length + 4);
+        const props = extractPropsFromText(original)
         if (linkSplit.length > 1) {
-            return { text: linkSplit[0].trim(), next: linkSplit[1].trim(), original: original };
+            return { text: linkSplit[0].trim(), next: linkSplit[1].trim(), original: original, ...props};
         } else {
-            return { text: "", next: link.trim(), original: original };
+            return { text: "", next: link.trim(), original: original, ...props};
         }
     }
 }
@@ -211,17 +213,22 @@ function extractHooksAtIndex(passageText, currentIndex) {
 
 
 function sanitizeText(passageText, links, hooks, format) {
-    links.forEach((link) => {
-        passageText = passageText.replace(link.original, '');
-    });
+    var pt = sanitizeLinks(passageText, links)
     let propRegexPattern = /{{(?:[^{}]|{(?:[^{}]|{[^{}]*})*})*}}(?:[^{}]|{(?:[^{}]|{[^{}]*})*})*{{\/(?:[^{}]|{(?:[^{}]|{[^{}]*})*})*}}/g
 
     if (format === FORMAT_HARLOWE_3) {
         hooks.forEach((hook) => {
-            passageText = passageText.replace(hook.original, '');
+            pt = passageText.replace(hook.original, '');
         });
     }
-    return passageText.replace(propRegexPattern, '').trim();
+    return pt.replace(propRegexPattern, '').trim();
+}
+
+function sanitizeLinks(passageText, links) {
+    links.forEach((link) => {
+        passageText = passageText.replace(link.original, '');
+    });
+    return passageText
 }
 
 
