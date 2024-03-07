@@ -1,6 +1,6 @@
 window.storyFormat({
     "name": "Twine to JSON",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "author": "Jonathan Schoonhoven  & Em Lazer-Walker & David Wert",
     "description": "Convert Twine story to JSON",
     "proofing": false,
@@ -44,6 +44,7 @@ const VALID_FORMATS = [FORMAT_TWINE, FORMAT_HARLOWE_3];
 function twineToJSON(format) {
     const storyElement = document.getElementsByTagName(STORY_TAG_NAME)[0];
     const storyMeta = getElementAttributes(storyElement);
+    console.log("STORY META", storyMeta);
     const result = {
         uuid: storyMeta.ifid,
         name: storyMeta.name,
@@ -52,6 +53,8 @@ function twineToJSON(format) {
         schemaName: storyMeta.format,
         schemaVersion: storyMeta['format-version'],
         createdAtMs: Date.now(),
+        start: storyMeta['startnode'],
+        test: "Hello",
     };
     validate(format);
     const passageElements = Array.from(storyElement.getElementsByTagName(PASSAGE_TAG_NAME));
