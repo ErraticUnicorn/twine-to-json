@@ -54,7 +54,6 @@ function twineToJSON(format) {
         schemaVersion: storyMeta['format-version'],
         createdAtMs: Date.now(),
         start: storyMeta['startnode'],
-        test: "Hello",
     };
     validate(format);
     const passageElements = Array.from(storyElement.getElementsByTagName(PASSAGE_TAG_NAME));
